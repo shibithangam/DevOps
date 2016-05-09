@@ -1,0 +1,38 @@
+﻿---
+- hosts: ci-server 
+  vars: 
+    jenkins_hostname: localhost
+    jenkins_http_port: 8080
+    jenkins_jar_location: /opt/jenkins-cli.jar
+    jenkins_plugins:
+      git
+      sonar
+      ssh
+      nodejs 
+    jenkins_repo_url: deb http://pkg.jenkins-ci.org/debian binary/ 
+    jenkins_repo_key_url: http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key  
+
+  tasks: 
+  - name: Ping the hosts
+    ping:
+
+  - name: Make sure Git is available
+    apt: pkg=git state=latest
+
+#  - name: Make sure npm is installed
+#    apt: pkg=nodejs state=latest
+
+  - name: Install the appdynamics agent
+    npm: name=appdynamics@4.1.8
+
+  - include: /etc/ansible/roles/ansiblebit.launchpad-ppa-webupd8/tasks/os_distribution/ubuntu.yml 
+
+  roles:  
+ 
+  - { role: ansiblebit.launchpad-ppa-webupd8, launchpad_ppa_webupd8_cache_valid_time: 3600 }
+  - ansiblebit.oracle-java
+  - geerlingguy.jenkins
+
+# tasks:
+# Post role tasks     
+

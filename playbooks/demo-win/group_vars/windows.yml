@@ -1,0 +1,10 @@
+# YAML file for Windows group
+
+ansible_user: Ansible
+ansible_password: 540T6un!
+ansible_ssh_pass: 540T6un!
+ansible_port: 5986
+ansible_connection: winrm
+ansible_winrm_server_cert_validation: ignore
+
+

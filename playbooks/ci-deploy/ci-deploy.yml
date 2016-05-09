@@ -1,0 +1,66 @@
+﻿# Playbook to deploy the application to any env. QA. Production, etc.
+
+# Issues 
+#   Home should be some type of variable/relative path
+#   Script should send some type of failure email
+#   Validation could be improved by checking specific site content
+
+- hosts: "{{deploy_env}}"
+  become: true
+  become_method: 'sudo'
+#  ansible_become_pass: 'osboxes.org'
+ 
+  vars: 
+    http_port: 8084
+
+  tasks: 
+  - name: Ping the hosts
+    ping:
+
+# No. for appd you currently want no later than node 4.4.2
+#  - name: Make sure nodejs is installed
+#    apt: pkg=nodejs state=latest
+
+  - name: Check if deploy env exists
+    stat: path=/home/osboxes/{{deploy_env}}/MeanJsHelloWorld
+    register: check_env
+
+  - name: create the deploy dir
+    file: path=/home/osboxes/{{deploy_env}} state=directory
+    when: check_env.stat.exists == false
+
+  - name: Get the code base from Git
+    git: repo=https://github.com/RegisDevOps/MeanJsHelloWorld.git dest=/home/osboxes/{{deploy_env}}/MeanJsHelloWorld force=yes
+
+  - name: Install the application
+    command: chdir=/home/osboxes/{{deploy_env}}/MeanJsHelloWorld npm install
+
+  - name: "Install forever (to run Node.js app)."
+    npm: name=forever global=yes state=present
+
+  - name: "Check list of Node.js apps running."
+    command: forever list
+    register: forever_list
+    changed_when: false
+
+  - name: "Set the config file"
+    copy: remote_src=True src=/home/osboxes/{{deploy_env}}/MeanJsHelloWorld/config/{{deploy_env}}.json dest=/home/osboxes/{{deploy_env}}/MeanJsHelloWorld/config/runconfig.json
+
+  - name: "Start MeanJsHelloWorld"
+    command: forever start www 
+    args: 
+      chdir: /home/osboxes/{{deploy_env}}/MeanJsHelloWorld/bin
+
+  - wait_for: port={{http_port}} delay=15
+
+  - name: "Check that the application is available"
+    action: uri url=http://127.0.0.1:{{http_port}}
+
+ 
+#  - include: 
+
+#  roles:  
+ 
+# tasks:
+# Post role tasks     
+
