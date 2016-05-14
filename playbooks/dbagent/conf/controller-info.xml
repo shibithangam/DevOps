@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller-info>
+
+	<controller-host>twcable.saas.appdynamics.com</controller-host>
+	<controller-port>443</controller-port>
+    <account-access-key>dd9e50dd931c</account-access-key>
+	<!-- The following attribute enables or disables SSL communications between the Database Agent and the Controller.-->
+	<controller-ssl-enabled>true</controller-ssl-enabled>
+ 
+	<!-- The following account-related parameters are necessary only for SaaS installations-->
+	<account-name>twcable</account-name>
+
+</controller-info>

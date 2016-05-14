@@ -1,0 +1,68 @@
+﻿---
+- hosts: '{{deploy_env}}'
+  become: true
+  become_method: 'sudo'
+
+  vars: 
+    agentVer: {version}
+    deployDir: /opt/appdynamics/{{deploy_env}}
+
+  tasks: 
+  - name: Ping the hosts
+    ping:
+
+
+
+  - name: Stop the current service
+    shell: /etc/init.d/{{deploy_env}}.sh stop
+    ignore_errors: True
+
+  - name: Stop /etc/init.d/agent too
+    shell: chkconfig {{deploy_env}}.sh off
+    ignore_errors: True
+
+  - name: Make sure the current process is gone
+    action: shell pkill -f "{{deploy_env}}" 
+    ignore_errors: True 
+
+  - name: Check the install directory exists
+    stat: path={{deployDir}}
+    register: check_path
+
+  - name: It exists
+    debug: msg='Yay, the path exists!'
+    when: check_path.stat.exists
+
+  - name: Install directory doesn't exist. Create it
+    command: sudo mkdir {{deployDir}}
+    when: check_path.stat.exists == false
+
+  - name: Copy the agent over
+    unarchive: src=../../../sw-repo/dbagent-{{version}}.zip dest={{deployDir}} copy=true 
+
+  - name: Copy the config file
+    copy: src=../conf/controller-info.xml dest={{deployDir}}/conf/controller-info.xml backup=yes
+
+  - name: Copy the startup init file
+    copy: src=../scripts/dbAgent.sh dest=/etc/init.d/{{deploy_env}}.sh backup=yes force=yes
+
+  - name: Add the runtime paramters to the file
+    replace: dest=/etc/init.d/{{deploy_env}}.sh regexp='deploy_env' replace='{{deploy_env}}'
+
+  - name: Substitute the unique host
+    replace: dest=/etc/init.d/{{deploy_env}}.sh regexp='inventory_hostname' replace='{{inventory_hostname}}-{{deploy_env}}'
+
+  - name: make sure the runtime permissions are correct
+    file: path=/etc/init.d/{{deploy_env}}.sh state=touch mode=775 
+
+  - name: daemonize the script. 
+    command: chkconfig --add /etc/init.d/{{deploy_env}}.sh
+
+  - name: Set the daemon run levels
+    command: chkconfig --level 2345 {{deploy_env}}.sh on
+
+  - name: Start the daemon 
+    shell: /etc/init.d/{{deploy_env}}.sh start
+
+
+    

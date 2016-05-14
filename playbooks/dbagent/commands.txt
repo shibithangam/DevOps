@@ -1,0 +1,1 @@
+ansible dbagentSvr -m ping -i ./inventory/hosts -u default -k
