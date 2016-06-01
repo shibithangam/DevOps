@@ -1,0 +1,67 @@
+# Ansible playbook to install an Application Dynamics Agent
+# Some of the commands are redundant but included to demo capability.
+
+  - hosts: windows
+    become: false
+   
+    vars:
+      agentver: {version}
+      tmpDir: c:\users\Anisble\tmp
+      deployDir: c:\programs\appd\{{deploy_env}}
+      agentName: machineagent-bundle-64bit-windows
+
+    tasks:
+    - name: ping the hosts
+      win_ping:
+
+    # Commenting out. ignore_errors not working. Need a test for service exists
+    # Powershell can also do this. adding for demo 
+    # - name: Stop the service
+    #  win_service:
+    #    name: 'Appdynamics Machine Agent'
+    #    state: stop
+    #    ignore_errors: True
+
+    - name: Make sure the install dir exists
+      win_stat: path='{{deployDir}}'
+      register: check_path
+
+    - name: Found install dir
+      debug: msg='Found it'
+      when: check_path.stat.exists
+
+    - name: Create the install directory
+      win_file: 
+        path: '{{deployDir}}' 
+        state: directory
+        when: check_path.stat.exists == false
+
+    - name: Copy the agent zip
+      win_copy: 
+        src: /home/osboxes/repo/{{agentName}}-{{version}}.zip
+        dest: c:\users\Ansible\repo\
+  
+    - name: unzip the agent
+      win_unzip: 
+        src: c:\users\Ansible\repo\{{agentName}}-{{version}}.zip
+        dest: '{{deployDir}}' 
+        rm: true
+
+    # Demo ACL change
+    - name: Add read rights to folder
+      win_acl: 
+        path: '{{deployDir}}'
+        user: Ansible
+        rights: Read
+        type: allow
+        state: present
+        inherit: 'ContainerInherit, ObjectInherit'
+        propagation: None
+
+    # Run Powershell to install the service
+    - name: Run install powershell script
+      script: ./scripts/installAgent.ps1
+
+# Any other validation or cleanup
+  
+ 
