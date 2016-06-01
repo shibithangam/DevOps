@@ -1,4 +1,5 @@
-﻿- hosts: '{{deploy_env}}'
+﻿---
+- hosts: '{{deploy_env}}'
   become: true
   become_method: 'sudo'
 
@@ -9,6 +10,8 @@
   tasks: 
   - name: Ping the hosts
     ping:
+
+
 
   - name: Stop the current service
     shell: /etc/init.d/{{deploy_env}}.sh stop

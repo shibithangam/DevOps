@@ -1,0 +1,5 @@
+ansible windows -i ~/ansible/playbooks/demo-win/inventory/hosts -m win_ping 
+
+ansible-playbook -i ~/ansible/playbooks/demo-win/inventory/hosts test.yml
+
+

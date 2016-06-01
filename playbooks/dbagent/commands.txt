@@ -1,1 +1,5 @@
 ansible dbagentSvr -m ping -i ./inventory/hosts -u default -k
+
+ansible-playbook dbagent.yml -i ./inventory/hosts --extra-vars '{"version":"4.1.8.7","deploy_env":"agent-eqa"}' -u default 
+
+
