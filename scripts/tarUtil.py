@@ -18,9 +18,9 @@ try:
         filename = raw_input("enter the filename to inspect:  ")
         for tarinfo in tar:
             if tarinfo.name == filename:
-                print "\n\
-                Filename:\t\t", tarinfo.name, "\n\
-                Size:\t\t", tarinfo.size, "bytes\n\
+                print "\n Filename:\t\t", tarinfo.name, \ 
+		"\nSize:\t\t", \
+		tarinfo.size, "bytes\n"
     elif selection == "3":
         print tar.list(verbose=True)
 except:

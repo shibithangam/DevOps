@@ -22,9 +22,6 @@
 #  - name: Make sure npm is installed
 #    apt: pkg=nodejs state=latest
 
-  - name: Install the appdynamics agent
-    npm: name=appdynamics@4.1.8
-
   - include: /etc/ansible/roles/ansiblebit.launchpad-ppa-webupd8/tasks/os_distribution/ubuntu.yml 
 
   roles:  
@@ -32,6 +29,7 @@
   - { role: ansiblebit.launchpad-ppa-webupd8, launchpad_ppa_webupd8_cache_valid_time: 3600 }
   - ansiblebit.oracle-java
   - geerlingguy.jenkins
+  ignore_errors: yes
 
 # tasks:
 # Post role tasks     
