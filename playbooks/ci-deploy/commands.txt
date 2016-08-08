@@ -1,0 +1,6 @@
+MY_PASSWORD='echo $MY_SECRET_USER_PASSWORD' 
+ansible-playbook /home/osboxes/ansible/playbooks/ci-deploy/ci-deploy.yml --extra-vars '{"deploy_env":"qa","sudo_pass":"$MY_SECRET_USER_PASSWORD"}' -i '/home/osboxes/ansible/playbooks/ci-deploy/inventory/hosts' -u osboxes
+
+ansible-playbook /home/osboxes/ansible/playbooks/ci-deploy/ci-deploy.yml --extra-vars '{"deploy_env":"qa","sudo_pass":"osboxes.org"}' -i '/home/osboxes/ansible/playbooks/ci-deploy/inventory/hosts' -u osboxes
+
+
