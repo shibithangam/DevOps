@@ -1,0 +1,8 @@
+---
+- hosts: qa
+  remote_user: osboxes
+  tasks:
+    - name: test connection
+      ping:
+      remote_user: osboxes
+
