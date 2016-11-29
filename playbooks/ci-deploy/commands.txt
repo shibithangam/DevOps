@@ -1,7 +1,12 @@
 
+Command Set #2 
+ls /home/osboxes/.ssh
+cat /home/osboxes/.ssh/id_rsa
+MY_PASSWORD='echo $MY_SECRET_USER_PASSWORD'
 echo $MY_SECRET_USER_PASSWORD
-ansible-playbook /home/osboxes/projects/ansible/playbooks/ci-deploy/ci-deploy.yml -vvv --extra-vars '{"deploy_env":"qa","sudo_pass":"$MY_SECRET_USER_PASSWORD"}' -i '/home/osboxes/projects/ansible/playbooks/ci-deploy/inventory/hosts' -u osboxes
+ansible-playbook /home/osboxes/projects/ansible/playbooks/ci-deploy/ci-deploy.yml -vvv --extra-vars '{"deploy_env":"qa","ansible_sudo_pass":"$MY_SECRET_USER_PASSWORD"}' -i '/home/osboxes/projects/ansible/playbooks/ci-deploy/inventory/hosts' -u osboxes
 
-ansible-playbook /home/osboxes/projects/ansible/playbooks/ci-deploy/ci-deploy.yml --extra-vars '{"deploy_env":"qa","sudo_pass":"osboxes.org"}' -i '/home/osboxes/projects/ansible/playbooks/ci-deploy/inventory/hosts' -u osboxes
+Command #1
+ansible-playbook /home/osboxes/projects/ansible/playbooks/ci-deploy/ci-deploy.yml --extra-vars '{"deploy_env":"qa","ansible_sudo_pass":"osboxes.org"}' -i '/home/osboxes/projects/ansible/playbooks/ci-deploy/inventory/hosts' -u osboxes
 
 

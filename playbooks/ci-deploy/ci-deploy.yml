@@ -8,7 +8,7 @@
 - hosts: "{{deploy_env}}"
   become: true
   become_method: 'sudo'
-#  become_pass: "{{sudo_pass}}"
+#  ansible_become_pass: "{{sudo_pass}}"
  
   vars: 
     http_port: 8084
@@ -17,23 +17,26 @@
   - name: Ping the hosts
     ping:
 
-# No. for appd you currently want no later than node 4.4.2
-#  - name: Make sure nodejs is installed
-#    apt: pkg=nodejs state=latest
+# Note: for some applications like appdynamics you currently want no later than node 4.4.2
+  - name: Make sure nodejs is installed
+    apt: pkg=nodejs-legacy state=latest
+
+  - name: install the node package manager npm
+    apt: pkg=npm state=latest
 
   - name: Check if deploy env exists
-    stat: path=/home/osboxes/{{deploy_env}}/MeanJsHelloWorld
+    stat: path={{workspace}}/{{deploy_env}}/MeanJsHelloWorld
     register: check_env
 
   - name: create the deploy dir
-    file: path=/home/osboxes/{{deploy_env}} state=directory
+    file: path={{workspace}}/{{deploy_env}} state=directory
     when: check_env.stat.exists == false
 
   - name: Get the code base from Git
-    git: repo=https://github.com/RegisDevOps/MeanJsHelloWorld.git dest=/home/osboxes/{{deploy_env}}/MeanJsHelloWorld force=yes
+    git: repo=https://github.com/RegisUniversity/MeanJsHelloWorld.git dest={{workspace}}/{{deploy_env}}/MeanJsHelloWorld force=yes
 
   - name: Install the application
-    command: chdir=/home/osboxes/{{deploy_env}}/MeanJsHelloWorld npm install
+    command: chdir={{workspace}}/{{deploy_env}}/MeanJsHelloWorld npm install
 
   - name: "Install forever (to run Node.js app)."
     npm: name=forever global=yes state=present
@@ -44,12 +47,12 @@
     changed_when: false
 
   - name: "Set the config file"
-    copy: remote_src=True src=/home/osboxes/{{deploy_env}}/MeanJsHelloWorld/config/{{deploy_env}}.json dest=/home/osboxes/{{deploy_env}}/MeanJsHelloWorld/config/runconfig.json
+    copy: remote_src=True src={{workspace}}/{{deploy_env}}/MeanJsHelloWorld/config/{{deploy_env}}.json dest={{workspace}}/{{deploy_env}}/MeanJsHelloWorld/config/runconfig.json
 
   - name: "Start MeanJsHelloWorld"
     command: forever start www 
     args: 
-      chdir: /home/osboxes/{{deploy_env}}/MeanJsHelloWorld/bin
+      chdir: "{{workspace}}/{{deploy_env}}/MeanJsHelloWorld/bin"
 
   - wait_for: port={{http_port}} delay=15
 

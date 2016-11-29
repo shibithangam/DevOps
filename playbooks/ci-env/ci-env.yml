@@ -1,5 +1,8 @@
 ﻿---
 - hosts: ci-server 
+  become: true
+  become_user: root
+
   vars: 
     jenkins_hostname: localhost
     jenkins_http_port: 8080

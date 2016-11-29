@@ -14,10 +14,16 @@
 192.168.4.109
 
 [ci-server]
-127.0.0.1 ansible_user=osboxes ansible_ssh_private_key_file=/home/osboxes/.ssh/id_rsa
+127.0.0.1
+# 127.0.0.1 ansible_user=osboxes ansible_ssh_private_key_file=/home/osboxes/.ssh/id_rsa
+
+[test]
+# comment out for interactive
+127.0.0.1 ansible_become_pass=osboxes.org
 
 [qa]
-127.0.0.1 ansible_become_pass=osboxes.org
+# Comment out for Jenkins
+127.0.0.1 ansible_become_pass=jenk1234
 
 [production]
 127.0.0.1
