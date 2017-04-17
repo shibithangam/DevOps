@@ -1,0 +1,6 @@
+# Run with sudo ansible-galaxy -vvv install -r oracle-java.yml
+
+- src: https://github.com/ansiblebit/oracle-java.git
+  scm: git
+  name: ansiblebit.oracle-java
+  version: 5.14.4
