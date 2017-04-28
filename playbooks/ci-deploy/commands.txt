@@ -9,4 +9,8 @@ ansible-playbook /home/osboxes/projects/ansible/playbooks/ci-deploy/ci-deploy.ym
 Command #1
 ansible-playbook /home/osboxes/projects/ansible/playbooks/ci-deploy/ci-deploy.yml --extra-vars '{"deploy_env":"qa","ansible_sudo_pass":"osboxes.org"}' -i '/home/osboxes/projects/ansible/playbooks/ci-deploy/inventory/hosts' -u osboxes
 
+New command #1 - 4/28/2017 - Added workspace
+Also modified the inventory file. See the notes there.
+You will probably need to edit that for Jenkins.
 
+ansible-playbook /home/osboxes/projects/ansible/playbooks/ci-deploy/ci-deploy.yml --extra-vars '{"deploy_env":"qa","ansible_sudo_pass":"osboxes.org","workspace":"/home/osboxes/"}' -i '/home/osboxes/projects/ansible/playbooks/ci-deploy/inventory/hosts' -u osboxes
