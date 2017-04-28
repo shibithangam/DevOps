@@ -19,7 +19,7 @@
 
 [test]
 # comment out for interactive
-# 127.0.0.1 ansible_become_pass=osboxes.org
+127.0.0.1 ansible_become_pass=osboxes.org
 
 [qa]
 # Comment out for Jenkins
