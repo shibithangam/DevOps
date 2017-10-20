@@ -1,3 +1,11 @@
+Command set for revised lab
+
+ansible-playbook ./playbooks/ci-deploy/ci-deploy.yml -vvv --extra-vars '{"deploy_env":"test","ansible_sudo_pass":"osboxes.org","workspace":"/var/lib/mean"}' -i './playbooks/ci-deploy/inventory/hosts' -u osboxes
+
+
+
+
+
 
 Command Set #2 
 ls /home/osboxes/.ssh
