@@ -19,7 +19,7 @@
 
 # Note: for some applications like appdynamics you currently want no later than node 4.4.2
   - name: Make sure nodejs is installed
-    apt: pkg=nodejs-legacy state=latest
+    apt: pkg=nodejs state=latest
 
   - name: install the node package manager npm
     apt: pkg=npm state=latest
