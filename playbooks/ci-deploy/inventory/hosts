@@ -23,9 +23,9 @@
 
 [qa]
 # Comment out for Jenkins
-# 127.0.0.1 ansible_become_pass=jenk1234
+127.0.0.1 ansible_become_pass=jenkins
 
-127.0.0.1 ansible_become_pass=osboxes.org
+# 127.0.0.1 ansible_become_pass=osboxes.org
 
 [production]
 127.0.0.1
